@@ -1,5 +1,5 @@
 {
-	"name": "raenells-portfolio-app",
+	"name": "raenells-portfolio",
 	"version": "0.0.1",
 	"description": "Raenell's FCC Backend Challenege WebApp",
 	"main": "server.js",
