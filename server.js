@@ -4,6 +4,7 @@
 // init project
 var express = require('express');
 var app = express();
+var port = process.env.PORT || 3000;
 
 //This is a test to see if I can git push heroku take 2 change #3
 
@@ -43,6 +44,17 @@ app.get("/api", function(req, res) {
   });
 });
 
+app.get("/api/whoami", function(req, res) {
+  res.json({
+    // "value": Object.keys(req),
+    "ipaddress": req.connection.remoteAddress,
+    "language": req.headers["accept-language"],
+    "software": req.headers["user-agent"],
+    // "req-headers": req.headers
+
+  })
+})
+
 app.get("/api/:date_string", function (req, res) {
   let dateString = req.params.date_string;
 
@@ -64,13 +76,9 @@ app.get("/api/:date_string", function (req, res) {
       "utc": passedInValue.toUTCString()
     })
   }
-
-  res.json({"error" : "Invalid Date"})
 });
 
-
-
 // listen for requests :)
-var listener = app.listen(process.env.PORT, function () {
+var listener = app.listen(port, function () {
   console.log('Your app is listening on port ' + listener.address().port);
 });
