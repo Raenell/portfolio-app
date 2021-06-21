@@ -74,10 +74,10 @@ app.get("/api/whoami", function(req, res) {
 //URL Shortener Service
 
 //Build a schema and model to store saved URLS
-const ShortURL = mongoose.model('ShortURL', new mongoose.Schema({
-    short_url  : String,
+var ShortURL = mongoose.model('ShortURL', new mongoose.Schema({
+    short_url : String,
     original_url: String,
-    suffix:String
+    suffix: String
 }));
 
 // parse application/x-www-form-urlencoded
@@ -87,7 +87,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 // POST /api/users gets JSON bodies
-app.post("/api/shorturl", (req, res) => {
+app.post("/api/shorturl/new/", (req, res) => {
 
   let client_requested_url = req.body.url;
   let suffix = shortid.generate();
@@ -101,7 +101,6 @@ app.post("/api/shorturl", (req, res) => {
 
   newURL.save((err, doc) => {
     if (err) return console.error(err);
-    console.log("Document inserted succussfully!", newURL);
     res.json({
       "saved": true,
       "short_url": newURL.short_url,
