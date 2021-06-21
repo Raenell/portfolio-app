@@ -87,19 +87,19 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 // POST /api/users gets JSON bodies
-app.post("/api/shorturl", function (req, res) {
+app.post("/api/shorturl", (req, res) => {
 
   let client_requested_url = req.body.url;
   let suffix = shortid.generate();
   let newShortURL = suffix
-  console.log(suffix, " <=  client_requested_url");
 
   let newURL = new ShortURL({
     short_url: __dirname + "/api/shorturl/" + suffix,
     original_url: client_requested_url,
     suffix: suffix
   })
-  newURL.save(function(err, doc) {
+
+  newURL.save((err, doc) => {
     if (err) return console.error(err);
     console.log("Document inserted succussfully!", newURL);
     res.json({
@@ -111,11 +111,10 @@ app.post("/api/shorturl", function (req, res) {
   });
 })
 
-app.get("/api/shorturl/:suffix", function(req, res){
+app.get("/api/shorturl/:suffix", (req, res) => {
   let userGeneratedSuffix = req.params.suffix;
-  ShortURL.find({suffix: userGeneratedSuffix}).then(function(foundUrls){
+  ShortURL.find({suffix: userGeneratedSuffix}).then(foundUrls => {
     let urlForRedirect = foundUrls[0];
-    console.log(urlForRedirect, " <= urlForRedirect");
     res.redirect(urlForRedirect.original_url)
   });
 });
