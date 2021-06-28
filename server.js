@@ -5,7 +5,7 @@ var database_uri = 'mongodb+srv://raenell:r43n311@raenellpractice.a0vow.mongodb.
 
 // init project
 require('dotenv').config();
-var express = require('express');
+var express = require('express'), app = express();
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser')
@@ -41,6 +41,10 @@ app.get("/requestHeaderParser", function (req, res) {
 
 app.get("/urlShortenerMicroservice", function (req, res) {
   res.sendFile(__dirname + '/views/urlShortenerMicroservice.html');
+});
+
+app.get("/exercise-tracker", function (req, res) {
+  res.sendFile(__dirname + '/views/exercise-tracker.html');
 });
 
 
@@ -117,6 +121,36 @@ app.get("/api/shorturl/:suffix", (req, res) => {
     res.redirect(urlForRedirect.original_url);
   });
 });
+
+
+//Exercise tracker
+var ExerciseUser = mongoose.model('exerciseUser', new mongoose.Schema({
+    _id : String,
+    username: String
+}));
+
+app.post("/api/users", (req, res) => {
+    console.log("Accessing post request");
+
+    var mongooseGenerateID = mongoose.Types.ObjectId();
+    console.log(mongooseGenerateID, " <= mongooseGerateID")
+    let exerciseUser = new ExerciseUser({
+      username: req.body.username,
+      _id: mongooseGenerateID
+    })
+    console.log(exerciseUser, " <= exerciseUser")
+
+    exerciseUser.save((err, doc) => {
+      if (err) return console.error(err);
+      console.log("About to save exercise user")
+      res.json({
+        "saved": true,
+        "username": exerciseUser.username,
+        "_id": exerciseUser["_id"]
+      });
+    });
+  })
+
 
 
 //Timestamp
