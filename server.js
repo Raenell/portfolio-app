@@ -126,7 +126,7 @@ app.get("/api/shorturl/:suffix", (req, res) => {
 //Exercise tracker
 var ExerciseUser = mongoose.model('exerciseUser', new mongoose.Schema({
     _id : String,
-    username: String
+    username: {type:String, unique: true }
 }));
 
 app.post("/api/users", (req, res) => {
@@ -150,6 +150,18 @@ app.post("/api/users", (req, res) => {
       });
     });
   })
+
+
+app.get("/api/users/", (req, res) => {
+  ExerciseUser.find({}, (err, exerciseUsers) =>{
+
+    res.json({
+        users: exerciseUsers
+    })
+  });
+});
+
+
 
 
 
